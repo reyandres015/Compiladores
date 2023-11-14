@@ -12,6 +12,11 @@ class Lector:
         for noTerminal in self.noTerminals:
             self.first(noTerminal,self.grammar)
         print(self.First)
+        print("first:",self.First)
+
+        for noTerminal in self.noTerminals:
+             self.follow(noTerminal,grammar)
+        print('Follow:',self.Follow)
         
 
     # Metodo para calcular el first
@@ -30,6 +35,18 @@ class Lector:
                     if a not in self.First[noTerminal]:
                         self.First[noTerminal].append(a)
                     else: continue  
+
+    def follow(self,noTerminal, grammar):
+        primerterminal = noTerminal[0]
+        self.Follow[noTerminal] = []
+        print("La regla:",primerterminal)
+        if primerterminal == 'S':
+            if '$' not in self.Follow[noTerminal]:
+                self.Follow[noTerminal].append('$')
+                print("gracias a diosito")
+        
+                
+
 
 if __name__=="__main__":
     #entrada numero de gramaticas
@@ -57,8 +74,50 @@ if __name__=="__main__":
             cadena=str(input())
             cadenas.append(cadena)
         Lector(noTerminals,grammar,cadenas,{},{})
-        #print(n,m,k,'n m k')
-        #print(noTerminals,'no terminales')
-        #print (grammar)
-        #print(cadenas)
+        print(n,m,k,'n m k')
+        print(noTerminals,'no terminales')
+        print (grammar)
+        print(cadenas)
+        
         numGramatica+=1
+
+'''
+CASO DE PRUEBA INICIAL
+1
+1 2 3
+S
+S-aSb
+S-c
+aacbb
+acb
+ab
+'''
+
+'''
+3
+1 2 3
+S
+S-aSb
+S-c
+aacbb
+acb
+ab
+2 4 4
+S A
+S-aSb
+S-A
+A-aA
+A-a
+aaabb
+aabb
+aaaaaaaaaabbbb
+ab
+3 5 1
+S T E
+S-iEtST
+S-a
+T-cS
+T-e
+E-b
+ibta
+'''
