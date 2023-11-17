@@ -43,24 +43,20 @@ class Lector:
         primerterminal = noTerminal[0]
         self.Follow[noTerminal] = []
         print("La regla:",primerterminal)
-        if primerterminal == 'S':                       # Cambiar para que coja el primer noTerminal
+        if primerterminal == 'S':  # Cambiar para que coja el primer noTerminal
             if '$' not in self.Follow[noTerminal]:
                 self.Follow[noTerminal].append('$')
                 print(self.Follow)
-
         
         for regla in reglas:
             if regla not in noTerminal: #posblemente hay que cambiarlo porque si hay un error tambien entra aqui
-                #print("JUAN CARLOS")
                 for i in range(len(regla)):
-                    #print(regla[i])
                     if regla[i] in noTerminal:
-                        # Cambiar el argumento de la llamada recursiva por el símbolo no terminal que corresponda
                         if i == len(regla): # Si el símbolo no terminal es el último de la regla
-                            print("ME ESTOY CUMPLIENDO")
+                            print("El no terminal es el ultimo de la regla")
                             self.Follow[noTerminal].append(self.Follow[noTerminal]) # Llamar a la función Follow con el mismo símbolo no terminal
-                        # Si el símbolo no terminal no es el último de la regla
                         else: 
+                            print("El no terminal NO es el ultimo de la regla")
                             self.Follow[noTerminal].append(regla[i+1]) # Llamar a la función Follow con el siguiente símbolo no terminal
                         
                         
