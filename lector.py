@@ -22,6 +22,7 @@ class Lector:
     # Metodo para calcular el first
     def first(self,noTerminal,grammar):
         reglas=grammar[noTerminal]
+        print
         for regla in reglas:
             if regla[0] not in self.noTerminals:
                 if noTerminal not in self.First:
@@ -37,17 +38,33 @@ class Lector:
                     else: continue  
 
     def follow(self,noTerminal, grammar):
+        reglas=grammar[noTerminal]
+        print(reglas[0])
         primerterminal = noTerminal[0]
         self.Follow[noTerminal] = []
         print("La regla:",primerterminal)
-        if primerterminal == 'S':
+        if primerterminal == 'S':                       # Cambiar para que coja el primer noTerminal
             if '$' not in self.Follow[noTerminal]:
                 self.Follow[noTerminal].append('$')
-                print("gracias a diosito")
+                print(self.Follow)
+
         
-                
-
-
+        for regla in reglas:
+            if regla not in noTerminal: #posblemente hay que cambiarlo porque si hay un error tambien entra aqui
+                #print("JUAN CARLOS")
+                for i in range(len(regla)):
+                    #print(regla[i])
+                    if regla[i] in noTerminal:
+                        # Cambiar el argumento de la llamada recursiva por el símbolo no terminal que corresponda
+                        if i == len(regla): # Si el símbolo no terminal es el último de la regla
+                            print("ME ESTOY CUMPLIENDO")
+                            self.Follow[noTerminal].append(self.Follow[noTerminal]) # Llamar a la función Follow con el mismo símbolo no terminal
+                        # Si el símbolo no terminal no es el último de la regla
+                        else: 
+                            self.Follow[noTerminal].append(regla[i+1]) # Llamar a la función Follow con el siguiente símbolo no terminal
+                        
+                        
+        
 if __name__=="__main__":
     #entrada numero de gramaticas
     gramarticas=int(input())
@@ -102,6 +119,7 @@ S-c
 aacbb
 acb
 ab
+1
 2 4 4
 S A
 S-aSb
@@ -120,4 +138,53 @@ T-cS
 T-e
 E-b
 ibta
+'''
+
+
+'''
+def follow(self, noTerminal, grammar):
+    # Inicializar el conjunto de seguimiento vacío para el símbolo no terminal
+    self.Follow[noTerminal] = []
+    # Obtener el primer símbolo del símbolo no terminal
+    primerterminal = noTerminal[0]
+    print("La regla:", primerterminal)
+    # Aplicar la primera regla: si el símbolo inicial de la gramática aparece en algún lado derecho, entonces el final de la entrada ($) pertenece al conjunto de seguimiento de ese símbolo no terminal
+    if primerterminal == 'S':
+        if '$' not in self.Follow[noTerminal]:
+            self.Follow[noTerminal].append('$')
+    # Aplicar las otras dos reglas: recorrer todas las producciones de la gramática
+    for key in grammar:
+        for value in grammar[key]:
+            # Buscar el símbolo no terminal en el lado derecho de la producción
+            if noTerminal in value:
+                # Obtener la posición del símbolo no terminal en el lado derecho
+                pos = value.index(noTerminal)
+                # Verificar si el símbolo no terminal es el último de la cadena
+                if pos == len(value) - 1:
+                    # Aplicar la segunda regla: si hay una producción A -> αB, entonces todo lo que esté en FOLLOW (A) está en FOLLOW (B)
+                    if key != noTerminal:
+                        # Calcular el conjunto de seguimiento del símbolo no terminal del lado izquierdo, si no se ha calculado antes
+                        if not self.Follow.get(key, False):
+                            self.follow(key, grammar)
+                        # Unir el conjunto de seguimiento del símbolo no terminal del lado izquierdo con el del símbolo no terminal actual, sin repetir elementos
+                        self.Follow[noTerminal] = list(set(self.Follow[key]) | set(self.Follow[noTerminal]))
+                else:
+                    # Aplicar la tercera regla: si hay una producción A -> αBβ, donde B es un símbolo no terminal y α y β son cadenas de símbolos terminales y no terminales, entonces todo lo que esté en FIRST (β), excepto ε, está en FOLLOW (B)
+                    # Obtener la subcadena que sigue al símbolo no terminal en el lado derecho
+                    next_str = value[pos + 1:]
+                    # Calcular el conjunto de first de la subcadena, si no se ha calculado antes
+                    if not self.First.get(next_str, False):
+                        self.first(next_str, grammar)
+                    # Verificar si el conjunto de first de la subcadena contiene ε
+                    if 'e' in self.First[next_str]:
+                        # Si contiene ε, se debe eliminar de first y se debe aplicar también la segunda regla
+                        self.First[next_str].remove('e')
+                        if key != noTerminal:
+                            if not self.Follow.get(key, False):
+                                self.follow(key, grammar)
+                            self.Follow[noTerminal] = list(set(self.Follow[key]) | set(self.Follow[noTerminal]))
+                    # Unir el conjunto de first de la subcadena con el de seguimiento del símbolo no terminal actual, sin repetir elementos
+                    self.Follow[noTerminal] = list(set(self.First[next_str]) | set(self.Follow[noTerminal]))
+    # Devolver el conjunto de seguimiento del símbolo no terminal
+    return self.Follow[noTerminal]
 '''
