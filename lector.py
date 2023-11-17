@@ -11,14 +11,20 @@ class Lector:
         self.Follow=Follow
         for noTerminal in self.noTerminals:
             self.first(noTerminal,self.grammar)
-        print(self.First)
+        #print(self.First)
         print("first:",self.First)
 
-        for noTerminal in self.noTerminals[0]:
-            self.follow1(noTerminal)
-            print('Follow:',self.Follow)
         for noTerminal in self.noTerminals:
+            self.ponerEnFollow(noTerminal)
+        
+        for noTerminal in self.noTerminals[0]:
             
+            self.follow1(noTerminal)
+
+        
+            
+        for noTerminal in self.noTerminals:
+            print(noTerminal)
             self.follow(noTerminal,grammar)
             print('Follow:',self.Follow)
 
@@ -28,7 +34,7 @@ class Lector:
     # Metodo para calcular el first
     def first(self,noTerminal,grammar):
         reglas=grammar[noTerminal]
-        print
+        
         for regla in reglas:
             if regla[0] not in self.noTerminals:
                 if noTerminal not in self.First:
@@ -41,36 +47,49 @@ class Lector:
                 for a in self.First[regla[0]]:
                     if a not in self.First[noTerminal]:
                         self.First[noTerminal].append(a)
-                    else: continue  
+                    
 
-    def follow1(self,noTerminal):
-        primerTerminal = noTerminal[0]
-        self.Follow[noTerminal]=[]
+    def ponerEnFollow(self,noTerminals):
+        self.Follow[noTerminals]=[]
         
+
+
+    def follow1(self,noTerminal):    
+        primerTerminal = noTerminal[0]    
         if primerTerminal[0] == noTerminal[0]:     
             if '$' not in self.Follow[noTerminal]:
                 self.Follow[noTerminal].append('$')
+
+    
                 
 
     
-    def follow(self,noTerminal,grammar):
+    def follow(self,noTerminal,grammar):        
         reglas = grammar[noTerminal]
         for regla in reglas:
-            if regla not in noTerminal: #posblemente hay que cambiarlo porque si hay un error tambien entra aqui
+            if regla not in noTerminal: 
                 #print("JUAN CARLOS")
-                print(reglas)
+                print('Reglas:',reglas)
                 print('Longitud de regla',len(regla))
                 for i in range(len(regla)):
-                    print(regla[i])
+                    print('regla[i]:',regla[i])
                     if regla[i] in noTerminal:
                         # Cambiar el argumento de la llamada recursiva por el símbolo no terminal que corresponda
+                        print('entre')
+                        print(regla)
                         if i == len(regla): # Si el símbolo no terminal es el último de la regla
                             # print("ME ESTOY CUMPLIENDO")
                             self.Follow[noTerminal].append(self.Follow[noTerminal]) # Llamar a la función Follow con el mismo símbolo no terminal
                         # Si el símbolo no terminal no es el último de la regla
+                        if i == self.Follow[noTerminal]:
+                            self.Follow[noTerminal].append(self.Follow[noTerminal])
+
                         else: 
                             self.Follow[noTerminal].append(regla[i+1]) # Llamar a la función Follow con el siguiente símbolo no terminal
-                        
+
+                  
+
+            
                         
         
 if __name__=="__main__":
