@@ -1,4 +1,4 @@
-# Clase Lector para hacer el analisis up and down
+# Clase Lector para hacer el calculo de First and Follow
 class Lector:
     # Constructor de la clase
     def __init__(self, noTerminals, grammar, strings,First,followResultado):
@@ -12,14 +12,7 @@ class Lector:
             self.first(noTerminal,self.grammar)
         # Ahora Calculamos Follow
         self.follow()
-        print("first:",self.First)
-        print("follow", self.followResultado)
         
-        """
-        # Ahora que tenemos First, podemos calcular Follow
-        for noTerminal in self.noTerminals:
-            self.follow(noTerminal)
-        print("Follow:", self.followResultado)"""
 
     def first(self,noTerminal,grammar):
         reglas=grammar[noTerminal]
@@ -49,7 +42,7 @@ class Lector:
         
         #segunda Regla A → αBβ First(β) ∈ Follow(B)
         # nt = no terminal
-        for noTerminal,ruleNonTerminal in grammar.items():
+        for noTerminal,ruleNonTerminal in self.grammar.items():
             for regla in ruleNonTerminal:
                 for i in range(len(regla)-1):
                     if regla[i] in self.noTerminals:
@@ -60,49 +53,13 @@ class Lector:
                             self.followResultado[regla[i]].add(regla[i+1])
         
         #tercera Regla A → αB Follow(B) = Follow(A)
-        for noTerminal,ruleNonTerminal in grammar.items():
+        for noTerminal,ruleNonTerminal in self.grammar.items():
             for regla in ruleNonTerminal:
-                if regla[len(regla)-1] in noTerminals:
+                if regla[len(regla)-1] in self.noTerminals:
                     for fo in self.followResultado[noTerminal]:
                         self.followResultado[regla[len(regla)-1]].add(fo)
-
-                    
-    #-------------------------------ESTO ES EL INTENTO DE ANTES, el de arriba tiene modificaciones hechas con GPT4-------------------------------
-    # def follow(self, nT):
-    #     #print("inside follow({})".format(nT))
-    #     follow_ = set()
-    #     #La funcion .items() es para que sea la llave y el valor
-    #     prods = productions_dict.items()
-    #     if nT==starting_symbol:
-    #         follow_ = follow_ | {'$'}
-    #     for nt,reglasDelNT in prods:
-    #         #nt, reglasDelNT son simbolos 
-    #         print("soy reglasDelNT:",reglasDelNT)
-    #         print("soy nt:",nt)
-    #         for regla in reglasDelNT:
-    #             print("soy regla:",regla)
-    #             for simbolo in regla:
-    #                 if simbolo==nT:
-    #                     following_symbol = regla[regla.index(simbolo) + 1:]
-    #                     #segunda regla. Si el simbolo es nT y no hay nada despues de el, entonces follow(nT) = follow(nt)
-    #                     if following_symbol=='':
-    #                         if nt==nT: #si el no teminal es el mismo que le mandamos a la función Follow
-    #                             continue
-    #                         else:
-    #                             follow_ = follow_ | follow(nt)
-    #                     else:
-    #                         follow_2 = self.first(following_symbol)
-    #                         if '@' in follow_2:
-    #                             follow_ = follow_ | follow_2-{'@'}
-    #                             follow_ = follow_ | follow(nt)
-    #                         else:
-    #                             follow_ = follow_ | follow_2
-                                
-    #     print("returning for follow({}) ".format(nT),follow_)
-    #     return follow_
-    #--------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        
-if __name__=="__main__":
+   
+"""if __name__=="__main__":
     #entrada numero de gramaticas
     gramarticas=int(input())
     numGramatica=0
@@ -127,14 +84,14 @@ if __name__=="__main__":
         for i in range(k):
             cadena=str(input())
             cadenas.append(cadena)
-        Lector(noTerminals,grammar,cadenas,{},{})
-        #print(n,m,k,'n m k')
-        #print(noTerminals,'no terminales')
-        #print (grammar)
-        #print(cadenas)
+        lector=Lector(noTerminals,grammar,cadenas,{},{})
         
-        numGramatica+=1
-
+        print("first",lector.First,"Follow",lector.followResultado)
+        numGramatica+=1"""
+        
+        
+        
+        
 '''
 CASO DE PRUEBA INICIAL
 1
