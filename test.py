@@ -45,7 +45,7 @@ def first(string):
 def follow(nT):
     #print("inside follow({})".format(nT))
     follow_ = set()
-    #print("FOLLOW", FOLLOW)
+    print("Soy los prods dict: ", productions_dict)
     prods = productions_dict.items()
     if nT==starting_symbol:
         follow_ = follow_ | {'$'}
