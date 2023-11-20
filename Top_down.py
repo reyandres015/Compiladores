@@ -11,10 +11,14 @@ class Top_down:
         self.Terminals=set()
         self.terminals()
         self.Terminals=list(self.Terminals)
-        self.TableM=np.zeros((len(self.NoTerminals),len(self.Terminals)))
-        self.dicRow={}
+        # Suponiendo que self.NoTerminals y self.Terminals son listas de strings
+        self.TableM = [["" for _ in range(len(self.Terminals))] for _ in range(len(self.NoTerminals))]
+        print(self.TableM)
+        self.dicRows={}
         self.dicColumns={}
         self.dicAsing()
+        #print(self.dicColumns,self.dicRows)
+        self.predictiveParsingTable()
         
     def terminals(self):
         for nt,produccions in self.Grammar.items():
@@ -26,18 +30,35 @@ class Top_down:
         
     def dicAsing(self):
         contRows=0
-        contColums=0
+        contColumns=0
         for terminal in self.Terminals:
-            self.dicRow[terminal]=contRows
-            contRows+=1
+            self.dicColumns[terminal]=contColumns
+            contColumns+=1
         for noTerminal in self.NoTerminals:
-            self.dicColumns[noTerminal]=contColums
-            contColums+=1
+            self.dicRows[noTerminal]=contRows
+            contRows+=1
     
     def predictiveParsingTable(self):
         for noTerminal in self.NoTerminals:
-            for produccion in self.Grammar[noTerminal]:   
-                return
+            for produccion in self.Grammar[noTerminal]:
+                first=self.getFirst(produccion)
+                for terminal in first:
+                    #print(self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminal]])
+                    if self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminal]]=="":
+                        self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminal]]=noTerminal+"->"+produccion
+                        print(noTerminal,terminal," = ",noTerminal," -> ",produccion)
+                    else:
+                        error=False
+        #recorrer para casillas vacias hacerlas error                   
+                
+                
+            
+    def getFirst(self,cadena):
+        for i in range(len(cadena)):
+            if cadena[i] not in self.NoTerminals:
+                return cadena[i]
+            else:
+                return self.First[cadena[i]]
     
 if __name__=="__main__":
     #entrada numero de gramaticas
