@@ -15,8 +15,6 @@ class Top_down:
         self.dicRow={}
         self.dicColumns={}
         self.dicAsing()
-        print(self.dicColumns,self.dicRow)
-        print(self.TableM)
         
     def terminals(self):
         for nt,produccions in self.Grammar.items():
@@ -36,14 +34,13 @@ class Top_down:
             self.dicColumns[noTerminal]=contColums
             contColums+=1
     
-    
-    def predictiveParsingTable(self,First,Follow):
-        
-        return
+    def predictiveParsingTable(self):
+        for noTerminal in self.NoTerminals:
+            for produccion in self.Grammar[noTerminal]:   
+                return
     
 if __name__=="__main__":
     #entrada numero de gramaticas
-    
     gramarticas=int(input())
     numGramatica=0
     while(numGramatica<gramarticas):
@@ -62,14 +59,12 @@ if __name__=="__main__":
             if rule[0] not in grammar:
                 grammar[rule[0]]=[]
             grammar[rule[0]].append(rule[1])
-        # Guardar las cadenas a evaluar
+
         cadenas=[]
         for i in range(k):
             cadena=str(input())
             cadenas.append(cadena)
         lector=Lector(noTerminals,grammar,cadenas,{},{})
-        
-        #print("first",lector.First,"Follow",lector.followResultado)
         
         top_down=Top_down(lector.First,lector.followResultado,grammar,noTerminals)
         numGramatica+=1
