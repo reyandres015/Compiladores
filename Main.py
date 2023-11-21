@@ -1,5 +1,7 @@
 from lector import *
 from Top_down import *
+from Bottom_Up import *
+
 
 if __name__=="__main__":
     #entrada numero de gramaticas
@@ -28,8 +30,8 @@ if __name__=="__main__":
             cadenas.append(cadena)
         lector=Lector(noTerminals,grammar,cadenas,{},{})
         # Top-down parsing
-        top_down=Top_down(lector.First,lector.followResultado,grammar,noTerminals,cadenas)
-        
+        #top_down=Top_down(lector.First,lector.followResultado,grammar,noTerminals,cadenas)
+        bottom_up = Bottom_up(lector.First,lector.followResultado,grammar,noTerminals,cadenas)
         numGramatica+=1
         
 
@@ -40,7 +42,7 @@ CASO DE PRUEBA INICIAL
 1
 1 2 3
 S
-S-Sb
+S-aSb
 S-c
 
 

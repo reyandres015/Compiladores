@@ -10,8 +10,13 @@ class Bottom_up:
         self.NoTerminals=NoTerminals
         self.cadenas=cadenas
         self.Terminals=set()
-      
+        self.extenderGramatica()
 
 
-    def extenderGramatica(self, grammar):
-        pass
+
+    #Extender la gramatica
+    def extenderGramatica(self):
+        extend =  self.NoTerminals[0]+"'"
+        self.Grammar[extend]=[self.NoTerminals[0]]
+        print(self.Grammar)
+        
