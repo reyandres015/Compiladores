@@ -85,7 +85,25 @@ if __name__=="__main__":
         for i in range(k):
             cadena=str(input())
             cadenas.append(cadena)
+            
         lector=Lector(noTerminals,grammar,cadenas,{},{})
+        lector.verifyLL1()
+
+        #---------------------------ELIMINAR RECURSIVIDAD POR IZQUIERDA---------------------------
+        # Llamada al método para eliminar la recursividad por la izquierda
+        lector.detect_and_eliminate_left_recursion()
+
+        # Opcionalmente, imprimir la gramática después de eliminar la recursividad por la izquierda
+        print("Gramática sin recursividad por la izquierda:")
+        for nt in lector.grammar:
+            rules = ' | '.join(' '.join(prod) for prod in lector.grammar[nt])
+            print(f"{nt} -> {rules}")
+        #---------------------------ELIMINAR RECURSIVIDAD POR IZQUIERDA---------------------------
+
+        #---------------------------VERIFICAR LL(1)---------------------------
+        lector.verifyLL1()
+        #---------------------------VERIFICAR LL(1)---------------------------
         
         top_down=Top_down(lector.First,lector.followResultado,grammar,noTerminals)
         numGramatica+=1
+
