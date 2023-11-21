@@ -16,10 +16,10 @@ class Top_down:
         self.dicRows={}
         self.dicColumns={}
         self.dicAsing()
+        print(self.First,self.Follow)
         #print(self.dicColumns,self.dicRows)
-        self.predictiveParsingTable()
-        for i in self.TableM:
-            print(i)
+        #self.predictiveParsingTable()
+        ## print(i)
         
     def terminals(self):
         for nt,produccions in self.Grammar.items():
@@ -55,7 +55,7 @@ class Top_down:
                         for terminalf in self.Follow[noTerminal]:
                             if self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminalf]]=="":
                                 self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminalf]]=noTerminal+"->"+produccion
-                    
+                            
                             
                 
         #recorrer para casillas vacias hacerlas error                   
