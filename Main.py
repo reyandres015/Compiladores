@@ -34,3 +34,77 @@ if __name__=="__main__":
         # Botton-up parsing
         
         numGramatica+=1
+        
+        
+        
+        
+        
+        
+'''
+CASO DE PRUEBA INICIAL
+1
+1 2 3
+S
+S-aSb
+S-c
+aacbb
+acb
+ab
+'''
+
+'''
+Segundo caso de prueba.
+1
+2 4 4
+S A
+S-aSb
+S-A
+A-aA
+A-a
+aaabb
+aabb
+aaaaaaaaaabbbb
+ab
+'''
+
+'''
+Tercer caso de prueba.
+1
+3 5 1
+S T E
+S-iEtST
+S-a
+T-cS
+T-e
+E-b
+ibta
+'''
+
+'''
+3
+1 2 3
+S
+S-aSb
+S-c
+aacbb
+acb
+ab
+2 4 4
+S A
+S-aSb
+S-A
+A-aA
+A-a
+aaabb
+aabb
+aaaaaaaaaabbbb
+ab
+3 5 1
+S T E
+S-iEtST
+S-a
+T-cS
+T-e
+E-b
+ibta
+'''
