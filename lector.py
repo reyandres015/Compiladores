@@ -48,8 +48,9 @@ class Lector:
                     if regla[i] in self.noTerminals:
                         if regla[i+1] in self.noTerminals:
                             for first in self.First[regla[i+1]]:
-                                self.followResultado[regla[i]].add(first)
-                        else:
+                                if first != "e":
+                                    self.followResultado[regla[i]].add(first)
+                        elif regla[i+1] != "e":
                             self.followResultado[regla[i]].add(regla[i+1])
         
         #tercera Regla A → αB Follow(B) = Follow(A)
