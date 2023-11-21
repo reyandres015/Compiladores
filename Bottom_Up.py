@@ -10,7 +10,10 @@ class Bottom_up:
         self.NoTerminals=NoTerminals
         self.cadenas=cadenas
         self.Terminals=set()
+        self.Items={}
         self.extenderGramatica()
+        self.Closure(self.Items)
+        
 
 
 
@@ -18,5 +21,14 @@ class Bottom_up:
     def extenderGramatica(self):
         extend =  self.NoTerminals[0]+"'"
         self.Grammar[extend]=[self.NoTerminals[0]]
-        print(self.Grammar)
+        self.NoTerminals.append(extend)
+        self.Items[extend]=["·"+self.NoTerminals[0]]
+        #print(self.Grammar,self.NoTerminals,self.Items)
+        
+        
+    def Closure(self, I):
+        print(I)
+    
+    
+    
         
