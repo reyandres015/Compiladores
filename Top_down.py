@@ -13,12 +13,12 @@ class Top_down:
         self.Terminals=list(self.Terminals)
         # Suponiendo que self.NoTerminals y self.Terminals son listas de strings
         self.TableM = [["" for _ in range(len(self.Terminals))] for _ in range(len(self.NoTerminals))]
-        print(self.TableM)
         self.dicRows={}
         self.dicColumns={}
         self.dicAsing()
         #print(self.dicColumns,self.dicRows)
         self.predictiveParsingTable()
+        print(self.TableM)
         
     def terminals(self):
         for nt,produccions in self.Grammar.items():
@@ -60,7 +60,7 @@ class Top_down:
             else:
                 return self.First[cadena[i]]
     
-if __name__=="__main__":
+"""if __name__=="__main__":
     #entrada numero de gramaticas
     gramarticas=int(input())
     numGramatica=0
@@ -88,4 +88,4 @@ if __name__=="__main__":
         lector=Lector(noTerminals,grammar,cadenas,{},{})
         
         top_down=Top_down(lector.First,lector.followResultado,grammar,noTerminals)
-        numGramatica+=1
+        numGramatica+=1"""
