@@ -16,10 +16,8 @@ class Top_down:
         self.dicRows={}
         self.dicColumns={}
         self.dicAsing()
-        print(self.First,self.Follow)
-        #print(self.dicColumns,self.dicRows)
-        #self.predictiveParsingTable()
-        ## print(i)
+        self.predictiveParsingTable()
+        self.Error=False
         
     def terminals(self):
         for nt,produccions in self.Grammar.items():
@@ -45,16 +43,16 @@ class Top_down:
                 first=self.getFirst(produccion)
                 for terminal in first:
                     if terminal != "e":
-                        #print(self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminal]])
                         if self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminal]]=="":
                             self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminal]]=noTerminal+"->"+produccion
-                            print(noTerminal,terminal," = ",noTerminal," -> ",produccion)
+                            #print(noTerminal,terminal," = ",noTerminal," -> ",produccion)
                         else:
-                            error=False
+                            self.Error=True
                     elif terminal == "e":
                         for terminalf in self.Follow[noTerminal]:
                             if self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminalf]]=="":
                                 self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminalf]]=noTerminal+"->"+produccion
+                                #print(noTerminal,terminalf," = ",noTerminal," -> ",produccion)
                             
                             
                 
