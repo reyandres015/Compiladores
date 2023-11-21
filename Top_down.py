@@ -160,16 +160,16 @@ class Top_down:
 
     #---------------------------VERIFICAR LL(1)---------------------------
     def verifyLL1(self):
-        for i in self.Grammar.keys():
+        for noterminales in self.Grammar.keys():
             interseccion = set()
-            for j in self.Grammar[i]:
-                if j[0] == 'e':
+            for produccion in self.Grammar[noterminales]:
+                if produccion[0] == 'e':
                     interseccion=(interseccion & set('e'))
                     print("if j[0] == 'e'")
                 else:
                     print("else de --> if j[0] == 'e'")
                     # interseccion=(interseccion & set(self.First[j[0]]))
-                    interseccion=(interseccion & set(j[0]))
+                    interseccion=(interseccion & set(produccion[0]))
             print("interseccion ",len(interseccion))
             if len(interseccion) != 0:
                 #return False 
