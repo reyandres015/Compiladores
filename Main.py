@@ -60,7 +60,7 @@ CASO DE PRUEBA INICIAL
 1
 1 2 3
 S
-S-aSb
+S-Sb
 S-c
 aacbb
 acb
