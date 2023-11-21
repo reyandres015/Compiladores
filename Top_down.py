@@ -18,13 +18,14 @@ class Top_down:
         self.dicAsing()
         #print(self.dicColumns,self.dicRows)
         self.predictiveParsingTable()
-        print(self.TableM)
+        for i in self.TableM:
+            print(i)
         
     def terminals(self):
         for nt,produccions in self.Grammar.items():
             for produccion in produccions:
                 for item in produccion:
-                    if item not in self.NoTerminals:
+                    if item not in self.NoTerminals and item != "e":
                         self.Terminals.add(item)
         self.Terminals.add('$')
         
@@ -43,12 +44,20 @@ class Top_down:
             for produccion in self.Grammar[noTerminal]:
                 first=self.getFirst(produccion)
                 for terminal in first:
-                    #print(self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminal]])
-                    if self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminal]]=="":
-                        self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminal]]=noTerminal+"->"+produccion
-                        print(noTerminal,terminal," = ",noTerminal," -> ",produccion)
-                    else:
-                        error=False
+                    if terminal != "e":
+                        #print(self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminal]])
+                        if self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminal]]=="":
+                            self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminal]]=noTerminal+"->"+produccion
+                            print(noTerminal,terminal," = ",noTerminal," -> ",produccion)
+                        else:
+                            error=False
+                    elif terminal == "e":
+                        for terminalf in self.Follow[noTerminal]:
+                            if self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminalf]]=="":
+                                self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminalf]]=noTerminal+"->"+produccion
+                    
+                            
+                
         #recorrer para casillas vacias hacerlas error                   
                 
                 
@@ -59,33 +68,3 @@ class Top_down:
                 return cadena[i]
             else:
                 return self.First[cadena[i]]
-    
-"""if __name__=="__main__":
-    #entrada numero de gramaticas
-    gramarticas=int(input())
-    numGramatica=0
-    while(numGramatica<gramarticas):
-        # Guarda valores de n m y k
-        n,m,k = map(int,input().split())
-        # Guarda los no terminales de la gramatica
-        noTerminals=input().split(' ')
-        # Guarda las reglas de la gramatica
-        grammar={}
-        # Asignar reglas a terminalesclear
-        for i in range(m):
-            rule=input().split('-')
-            if len(rule)!=2:
-                print(f"Error in rule: {rule}")
-                continue
-            if rule[0] not in grammar:
-                grammar[rule[0]]=[]
-            grammar[rule[0]].append(rule[1])
-
-        cadenas=[]
-        for i in range(k):
-            cadena=str(input())
-            cadenas.append(cadena)
-        lector=Lector(noTerminals,grammar,cadenas,{},{})
-        
-        top_down=Top_down(lector.First,lector.followResultado,grammar,noTerminals)
-        numGramatica+=1"""
