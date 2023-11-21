@@ -10,6 +10,7 @@ class Top_down:
         self.NoTerminals=NoTerminals
         self.cadenas=cadenas
         self.Terminals=set()
+        self.Resultados=[]
         self.terminals()
         self.Terminals=list(self.Terminals)
         # Suponiendo que self.NoTerminals y self.Terminals son listas de strings
@@ -19,11 +20,9 @@ class Top_down:
         self.Error=False
         self.dicAsing()
         self.predictiveParsingTable()
-        
-        for clom in self.TableM:
-            print(clom)
         for cadena in self.cadenas:
             self.predictiveParsing(cadena)
+        
         
         
     def terminals(self):
@@ -83,7 +82,7 @@ class Top_down:
                 self.Error=True
                 break
             elif self.TableM[self.dicRows[xTop]][self.dicColumns[a]] != "":
-                print(wString,TStack,xTop,"antes")
+                #print(wString,TStack,xTop,"antes")
                 TStack.pop()
                 regla=self.TableM[self.dicRows[xTop]][self.dicColumns[a]]
                 regla=regla.split("->")
@@ -93,15 +92,14 @@ class Top_down:
                     if valor!="e":
                         TStack.append(valor)
                 xTop=TStack[-1]
-                print(wString,TStack,xTop,"despues")
-                input()
+                #print(wString,TStack,xTop,"despues")
             else:
                 print("Error")
                 break
         if self.Error != False:
-            print("si")
+            self.Resultados.append("si")
         else: 
-            print("Error")
+            self.Resultados.append("Error")
                 
                 
             
