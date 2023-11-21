@@ -1,5 +1,4 @@
 from lector import *
-import numpy as np
 
 class Top_down:
     
@@ -13,7 +12,8 @@ class Top_down:
         self.Resultados=[]
         self.terminals()
         self.Terminals=list(self.Terminals)
-        # Suponiendo que self.NoTerminals y self.Terminals son listas de strings
+        self.verifyLL1()
+        self.detect_and_eliminate_left_recursion()
         self.TableM = [["" for _ in range(len(self.Terminals))] for _ in range(len(self.NoTerminals))]
         self.dicRows={}
         self.dicColumns={}

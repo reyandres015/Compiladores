@@ -29,22 +29,6 @@ if __name__=="__main__":
         lector=Lector(noTerminals,grammar,cadenas,{},{})
         # Top-down parsing
         top_down=Top_down(lector.First,lector.followResultado,grammar,noTerminals,cadenas)
-        # Botton-up parsing
-
-        #---------------------------ELIMINAR RECURSIVIDAD POR IZQUIERDA---------------------------
-        # Llamada al método para eliminar la recursividad por la izquierda
-        #top_down.detect_and_eliminate_left_recursion()
-
-        # Opcionalmente, imprimir la gramática después de eliminar la recursividad por la izquierda
-        print("Gramática sin recursividad por la izquierda:")
-        for nt in lector.grammar:
-            rules = ' | '.join(' '.join(prod) for prod in lector.grammar[nt])
-            print(f"{nt} -> {rules}")
-        #---------------------------ELIMINAR RECURSIVIDAD POR IZQUIERDA---------------------------
-
-        #---------------------------VERIFICAR LL(1)---------------------------
-        top_down.verifyLL1()
-        #---------------------------VERIFICAR LL(1)---------------------------
         
         numGramatica+=1
         
