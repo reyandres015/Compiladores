@@ -30,7 +30,7 @@ if __name__=="__main__":
             cadenas.append(cadena)
         lector=Lector(noTerminals,grammar,cadenas,{},{})
         # Top-down parsing
-        top_down=Top_down(lector.First,lector.followResultado,grammar,noTerminals)
+        top_down=Top_down(lector.First,lector.followResultado,grammar,noTerminals,cadenas)
         # Botton-up parsing
         
         numGramatica+=1

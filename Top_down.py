@@ -3,11 +3,12 @@ import numpy as np
 
 class Top_down:
     
-    def __init__(self,First,Follow,Grammar,NoTerminals):
+    def __init__(self,First,Follow,Grammar,NoTerminals,cadenas):
         self.First=First
         self.Follow=Follow
         self.Grammar=Grammar
         self.NoTerminals=NoTerminals
+        self.cadenas=cadenas
         self.Terminals=set()
         self.terminals()
         self.Terminals=list(self.Terminals)
@@ -15,9 +16,15 @@ class Top_down:
         self.TableM = [["" for _ in range(len(self.Terminals))] for _ in range(len(self.NoTerminals))]
         self.dicRows={}
         self.dicColumns={}
+        self.Error=False
         self.dicAsing()
         self.predictiveParsingTable()
-        self.Error=False
+        
+        for clom in self.TableM:
+            print(clom)
+        for cadena in self.cadenas:
+            self.predictiveParsing(cadena)
+        
         
     def terminals(self):
         for nt,produccions in self.Grammar.items():
@@ -53,10 +60,48 @@ class Top_down:
                             if self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminalf]]=="":
                                 self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminalf]]=noTerminal+"->"+produccion
                                 #print(noTerminal,terminalf," = ",noTerminal," -> ",produccion)
-                            
-                            
-                
-        #recorrer para casillas vacias hacerlas error                   
+                                               
+    def predictiveParsing(self,cadena):
+        posicion=0
+        TStack=['$',self.NoTerminals[0]]
+        wString=cadena+'$'
+        a=wString[posicion]
+        xTop=TStack[-1]
+        while(xTop!='$'):
+            if xTop==a:
+                #print("top=a")
+                TStack.pop()
+                xTop=TStack[-1]
+                posicion+=1
+                a=wString[posicion]
+            elif xTop in self.Terminals:
+                self.Error=True
+                #print("top is a terminal")
+                break
+            elif self.TableM[self.dicRows[xTop]][self.dicColumns[a]] == "":
+                #print("Error")
+                self.Error=True
+                break
+            elif self.TableM[self.dicRows[xTop]][self.dicColumns[a]] != "":
+                print(wString,TStack,xTop,"antes")
+                TStack.pop()
+                regla=self.TableM[self.dicRows[xTop]][self.dicColumns[a]]
+                regla=regla.split("->")
+                producion=regla[1]
+                #print(producion)
+                for valor in reversed(producion):
+                    if valor!="e":
+                        TStack.append(valor)
+                xTop=TStack[-1]
+                print(wString,TStack,xTop,"despues")
+                input()
+            else:
+                print("Error")
+                break
+        if self.Error != False:
+            print("si")
+        else: 
+            print("Error")
                 
                 
             
