@@ -12,8 +12,8 @@ class Top_down:
         self.Resultados=[]
         self.terminals()
         self.Terminals=list(self.Terminals)
-        self.verifyLL1()
-        self.detect_and_eliminate_left_recursion()
+        #self.verifyLL1()
+        #self.detect_and_eliminate_left_recursion()
         self.TableM = [["" for _ in range(len(self.Terminals))] for _ in range(len(self.NoTerminals))]
         self.dicRows={}
         self.dicColumns={}
@@ -21,8 +21,9 @@ class Top_down:
         self.dicAsing()
         self.predictiveParsingTable()
         for cadena in self.cadenas:
-            self.predictiveParsing(cadena)
-        
+            self.Resultados.append(self.predictiveParsing(cadena))
+        for valores in self.Resultados:
+            print(valores)
         
     def terminals(self):
         for nt,produccions in self.Grammar.items():
@@ -50,7 +51,6 @@ class Top_down:
                     if terminal != "e":
                         if self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminal]]=="":
                             self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminal]]=noTerminal+"->"+produccion
-                            #print(noTerminal,terminal," = ",noTerminal," -> ",produccion)
                         else:
                             self.Error=True
                     elif terminal == "e":
@@ -61,45 +61,44 @@ class Top_down:
                                                
     def predictiveParsing(self,cadena):
         posicion=0
-        TStack=['$',self.NoTerminals[0]]
+        TStack=['$','S'] #pila
         wString=cadena+'$'
         a=wString[posicion]
         xTop=TStack[-1]
         while(xTop!='$'):
+            print(wString,a,TStack)
             if xTop==a:
-                #print("top=a")
                 TStack.pop()
                 xTop=TStack[-1]
                 posicion+=1
                 a=wString[posicion]
-            elif xTop in self.Terminals:
+            elif a not in self.Terminals and a!="e":
                 self.Error=True
-                #print("top is a terminal")
+                #print("Error caracter desconocido")
                 break
-            elif a in self.Terminals: 
+            elif a in self.Terminals and xTop in self.NoTerminals: 
                 if self.TableM[self.dicRows[xTop]][self.dicColumns[a]] == "":
-                #print("Error")
-                    self.Error=True
+                    #print("Error tabla error")
+                    #self.Error=True
                     break
-                elif self.TableM[self.dicRows[xTop]][self.dicColumns[a]] != "":
-                    #print(wString,TStack,xTop,"antes")
+                else:
                     TStack.pop()
                     regla=self.TableM[self.dicRows[xTop]][self.dicColumns[a]]
                     regla=regla.split("->")
                     producion=regla[1]
-                #print(producion)
                     for valor in reversed(producion):
                         if valor!="e":
                             TStack.append(valor)
                     xTop=TStack[-1]
-                #print(wString,TStack,xTop,"despues")
             else:
-                print("Error")
+                self.Error=True
                 break
-        if self.Error != False:
-            self.Resultados.append("si")
-        else: 
-            self.Resultados.append("Error")
+            #input()
+        print(wString,a,TStack)
+        if a == TStack[-1]:
+            return "si"
+        elif a != TStack[-1] or self.Error: 
+            return "no"
                 
             
     def getFirst(self,cadena):
@@ -174,3 +173,21 @@ class Top_down:
                 #return False 
                 print("No es LL(1)") 
                 break
+            
+    
+"""def verificarLL1(self):
+        interseccion=False
+        for noTerminal in self.NoTerminals:
+            for alpha in self.Grammar[noTerminal]:
+                for beta in self.Grammar[noTerminal]:
+                    if alpha!=beta and alpha!="e" and beta!="e":
+                        firstAlpha=self.getFirst(alpha)
+                        firstBeta=self.getFirst(beta)
+                        for firstA in firstAlpha:
+                            for firstB in firstBeta:
+                                if firstA==firstB:
+                                    interseccion=True
+                                    return interseccion
+                    elif alpha=="e":
+                        
+        return interseccion"""

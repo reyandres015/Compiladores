@@ -5,6 +5,7 @@ class Lector:
         self.grammar=grammar
         self.strings=strings
         self.First=First
+        
         self.followResultado=followResultado
         # Primero calculamos First para cada no terminal
         for noTerminal in self.noTerminals:
@@ -15,11 +16,10 @@ class Lector:
 
     def first(self,noTerminal,grammar):
         reglas=grammar[noTerminal]
-        
+        if noTerminal not in self.First:
+                    self.First[noTerminal]=[]
         for regla in reglas:
             if regla[0] not in self.noTerminals:
-                if noTerminal not in self.First:
-                    self.First[noTerminal]=[]
                 if regla[0] not in self.First[noTerminal]:
                     self.First[noTerminal].append(regla[0])
                 else: continue
