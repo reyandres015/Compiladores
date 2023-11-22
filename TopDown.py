@@ -66,7 +66,7 @@ class Top_down:
         a=wString[posicion]
         xTop=TStack[-1]
         while(xTop!='$'):
-            print(wString,a,TStack)
+            #print(wString,a,TStack)
             if xTop==a:
                 TStack.pop()
                 xTop=TStack[-1]
@@ -94,7 +94,7 @@ class Top_down:
                 self.Error=True
                 break
             #input()
-        print(wString,a,TStack)
+        #print(wString,a,TStack)
         if a == TStack[-1]:
             return "si"
         elif a != TStack[-1] or self.Error: 
