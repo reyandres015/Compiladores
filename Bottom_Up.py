@@ -28,3 +28,4 @@ class Bottom_up:
 
             # Add each production rule to the grammar
             self.Grammar[non_terminal].extend(production_rules)
+            

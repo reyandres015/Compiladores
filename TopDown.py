@@ -77,21 +77,22 @@ class Top_down:
                 self.Error=True
                 #print("top is a terminal")
                 break
-            elif self.TableM[self.dicRows[xTop]][self.dicColumns[a]] == "":
+            elif a in self.Terminals: 
+                if self.TableM[self.dicRows[xTop]][self.dicColumns[a]] == "":
                 #print("Error")
-                self.Error=True
-                break
-            elif self.TableM[self.dicRows[xTop]][self.dicColumns[a]] != "":
-                #print(wString,TStack,xTop,"antes")
-                TStack.pop()
-                regla=self.TableM[self.dicRows[xTop]][self.dicColumns[a]]
-                regla=regla.split("->")
-                producion=regla[1]
+                    self.Error=True
+                    break
+                elif self.TableM[self.dicRows[xTop]][self.dicColumns[a]] != "":
+                    #print(wString,TStack,xTop,"antes")
+                    TStack.pop()
+                    regla=self.TableM[self.dicRows[xTop]][self.dicColumns[a]]
+                    regla=regla.split("->")
+                    producion=regla[1]
                 #print(producion)
-                for valor in reversed(producion):
-                    if valor!="e":
-                        TStack.append(valor)
-                xTop=TStack[-1]
+                    for valor in reversed(producion):
+                        if valor!="e":
+                            TStack.append(valor)
+                    xTop=TStack[-1]
                 #print(wString,TStack,xTop,"despues")
             else:
                 print("Error")
