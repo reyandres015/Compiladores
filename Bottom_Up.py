@@ -20,8 +20,7 @@ class Bottom_up:
         self.Grammar[extend]=[self.NoTerminals[0]]
         print(self.Grammar)
         
-
-
+  
     def goTo(self,Items):
         for non_terminal, production_rules in new_grammar.items():
             if non_terminal not in self.Grammar:
