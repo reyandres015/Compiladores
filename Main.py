@@ -1,8 +1,6 @@
 from lector import *
 from Top_down import *
 
-
-
 if __name__=="__main__":
     #entrada numero de gramaticas
     gramarticas=int(input())
@@ -50,21 +48,18 @@ if __name__=="__main__":
         
         numGramatica+=1
         
-        
-        
-        
-        
+
+
         
 '''
 CASO DE PRUEBA INICIAL
 1
 1 2 3
 S
-S-aSb
+S-Sb
 S-c
-aacbb
-acb
-ab
+
+
 '''
 
 '''
