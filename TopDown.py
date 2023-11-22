@@ -186,21 +186,3 @@ class Top_down:
                                         interseccion=True
                                         return interseccion
         return interseccion
-            
-    
-"""def verificarLL1(self):
-        interseccion=False
-        for noTerminal in self.NoTerminals:
-            for alpha in self.Grammar[noTerminal]:
-                for beta in self.Grammar[noTerminal]:
-                    if alpha!=beta and alpha!="e" and beta!="e":
-                        firstAlpha=self.getFirst(alpha)
-                        firstBeta=self.getFirst(beta)
-                        for firstA in firstAlpha:
-                            for firstB in firstBeta:
-                                if firstA==firstB:
-                                    interseccion=True
-                                    return interseccion
-                    elif alpha=="e":
-                        
-        return interseccion"""
