@@ -1,7 +1,6 @@
 from Lector import *
 
 class Top_down:
-    
     def __init__(self,First,Follow,Grammar,NoTerminals,cadenas):
         self.First=First
         self.Follow=Follow
@@ -161,21 +160,32 @@ class Top_down:
 
     #---------------------------VERIFICAR LL(1)---------------------------
     def verifyLL1(self):
-        for noterminales in self.Grammar.keys():
-            interseccion = set()
-            for produccion in self.Grammar[noterminales]:
-                if produccion[0] == 'e':
-                    interseccion=(interseccion & set('e'))
-                    print("if j[0] == 'e'")
-                else:
-                    print("else de --> if j[0] == 'e'")
-                    # interseccion=(interseccion & set(self.First[j[0]]))
-                    interseccion=(interseccion & set(produccion[0]))
-            print("interseccion ",len(interseccion))
-            if len(interseccion) != 0:
-                #return False 
-                print("No es LL(1)") 
-                break
+        interseccion=False
+        for noTerminal in self.NoTerminals:
+            for alpha in self.Grammar[noTerminal]:
+                for beta in self.Grammar[noTerminal]:
+                    if alpha!=beta and alpha!="e" and beta!="e":
+                        firstAlpha=self.getFirst(alpha)
+                        firstBeta=self.getFirst(beta)
+                        if len(firstAlpha) == 1 and firstAlpha[0]=="e":
+                            for firstB in firstBeta:
+                                for followTerminal in self.Follow[noTerminal]:
+                                    if firstB==followTerminal:
+                                        interseccion=True
+                                        return interseccion
+                        elif len(firstBeta)==1 and firstBeta[0]=="e":
+                            for fisrtA in firstAlpha:
+                                for followTerminalA in self.Follow[noTerminal]:
+                                    if fisrtA==followTerminalA:
+                                        interseccion=True
+                                        return interseccion
+                        else:
+                            for firstA in firstAlpha:
+                                for firstB in firstBeta:
+                                    if firstA==firstB:
+                                        interseccion=True
+                                        return interseccion
+        return interseccion
             
     
 """def verificarLL1(self):
