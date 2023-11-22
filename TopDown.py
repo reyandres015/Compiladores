@@ -24,7 +24,6 @@ class Top_down:
             self.predictiveParsing(cadena)
         
         
-        
     def terminals(self):
         for nt,produccions in self.Grammar.items():
             for produccion in produccions:
@@ -100,7 +99,6 @@ class Top_down:
             self.Resultados.append("si")
         else: 
             self.Resultados.append("Error")
-                
                 
             
     def getFirst(self,cadena):
