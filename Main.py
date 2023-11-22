@@ -1,4 +1,4 @@
-from lector import *
+from Lector import *
 from TopDown import *
 from Bottom_Up import *
 
@@ -44,8 +44,14 @@ CASO DE PRUEBA INICIAL
 S
 S-aSb
 S-c
+aacbb
+acb
+ab
 
-
+salida
+si
+si
+no
 '''
 
 '''
@@ -61,6 +67,12 @@ aaabb
 aabb
 aaaaaaaaaabbbb
 ab
+
+salida
+si
+no
+si
+no
 '''
 
 '''
@@ -74,6 +86,9 @@ T-cS
 T-e
 E-b
 ibta
+
+salida
+error
 '''
 
 '''
@@ -103,4 +118,36 @@ T-cS
 T-e
 E-b
 ibta
+'''
+
+
+'''
+caso de prueba 4
+1
+1 2 10
+S
+S-aSb
+S-c
+aaaacbbbb
+c
+aaaaaacbbbbbb
+acb
+aaacbbb
+aaaacbbb
+cb
+aaaaacbbbbbb
+ac
+d
+
+Salida
+yes
+yes
+yes
+yes
+yes
+no
+no
+no
+no
+no
 '''

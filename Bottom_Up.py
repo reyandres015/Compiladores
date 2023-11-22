@@ -1,6 +1,3 @@
-#Clase botom up.
-
-
 class Bottom_up:
 
     def __init__(self,First,Follow,Grammar,NoTerminals,cadenas):
@@ -13,14 +10,17 @@ class Bottom_up:
         self.extenderGramatica()
 
 
-
     #Extender la gramatica
     def extenderGramatica(self):
         extend =  self.NoTerminals[0]+"'"
         self.Grammar[extend]=[self.NoTerminals[0]]
         print(self.Grammar)
         
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> bbc9c92e1ee701354b5761f4357d6f80a3c886fc
     def goTo(self,Items):
         for non_terminal, production_rules in new_grammar.items():
             if non_terminal not in self.Grammar:
