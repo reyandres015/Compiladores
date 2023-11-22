@@ -10,10 +10,7 @@ class Bottom_up:
         self.NoTerminals=NoTerminals
         self.cadenas=cadenas
         self.Terminals=set()
-        self.Items={}
         self.extenderGramatica()
-        self.Closure(self.Items)
-        
 
 
 
@@ -21,14 +18,15 @@ class Bottom_up:
     def extenderGramatica(self):
         extend =  self.NoTerminals[0]+"'"
         self.Grammar[extend]=[self.NoTerminals[0]]
-        self.NoTerminals.append(extend)
-        self.Items[extend]=["·"+self.NoTerminals[0]]
-        #print(self.Grammar,self.NoTerminals,self.Items)
+        print(self.Grammar)
         
-        
-    def Closure(self, I):
-        print(I)
-    
-    
-    
-        
+
+
+    def goTo(self,Items):
+        for non_terminal, production_rules in new_grammar.items():
+            if non_terminal not in self.Grammar:
+                self.Grammar[non_terminal] = []  # Initialize the list if non-terminal is not in the grammar
+
+            # Add each production rule to the grammar
+            self.Grammar[non_terminal].extend(production_rules)
+            
