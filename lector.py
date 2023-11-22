@@ -10,8 +10,6 @@ class Lector:
         # Primero calculamos First para cada no terminal
         for noTerminal in self.noTerminals:
             self.first(noTerminal,self.grammar)
-        print(self.First)
-        input()
         # Ahora Calculamos Follow
         self.follow()
         
