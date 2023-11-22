@@ -1,4 +1,4 @@
-from lector import *
+from Lector import *
 
 class Top_down:
     
@@ -33,6 +33,7 @@ class Top_down:
                         self.Terminals.add(item)
         self.Terminals.add('$')
         
+
     def dicAsing(self):
         contRows=0
         contColumns=0
@@ -43,6 +44,7 @@ class Top_down:
             self.dicRows[noTerminal]=contRows
             contRows+=1
     
+
     def predictiveParsingTable(self):
         for noTerminal in self.NoTerminals:
             for produccion in self.Grammar[noTerminal]:
@@ -58,6 +60,7 @@ class Top_down:
                             if self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminalf]]=="":
                                 self.TableM[self.dicRows[noTerminal]][self.dicColumns[terminalf]]=noTerminal+"->"+produccion
                                 #print(noTerminal,terminalf," = ",noTerminal," -> ",produccion)
+                
                                                
     def predictiveParsing(self,cadena):
         posicion=0

@@ -30,6 +30,7 @@ class Lector:
                         if a not in self.First[noTerminal]:
                             self.First[noTerminal].append(a)
 
+
     def follow(self):
         for nonTerminal in self.noTerminals:
             if nonTerminal not in self.followResultado:

@@ -1,4 +1,4 @@
-from lector import *
+from Lector import *
 from TopDown import *
 from Bottom_Up import *
 
