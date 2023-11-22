@@ -109,3 +109,69 @@ class Top_down:
                 return cadena[i]
             else:
                 return self.First[cadena[i]]
+            
+    #---------------------------ELIMINAR RECURSIVIDAD POR IZQUIERDA---------------------------
+    def detect_and_eliminate_left_recursion(self):
+        print("eliminar recursividad por la izquierda")
+        new_grammar = {}
+        for noTerminal in self.NoTerminals:
+            reglas = self.Grammar[noTerminal]
+            recursive_rules = []
+            non_recursive_rules = []
+            
+            # Separa las reglas recursivas de las no recursivas
+            for regla in reglas:
+                if regla[0] == noTerminal:
+                    recursive_rules.append(regla)
+                else:
+                    non_recursive_rules.append(regla)
+            
+            # Si hay reglas recursivas, realiza la eliminación
+            if recursive_rules:
+                print(f"Recursion found in {noTerminal} -> {recursive_rules}")
+                # Crear nuevo no terminal (por ejemplo: A -> A', donde A' es el nuevo no terminal)
+                new_noTerminal = noTerminal + "'"
+                self.NoTerminals.append(new_noTerminal)
+                new_grammar[new_noTerminal] = []
+
+                # Elimina la recursividad por la izquierda
+                for regla in recursive_rules:
+                    # Crear nueva regla (A -> B A')
+                    new_rule = regla[1:]  # Copia la regla desde el segundo símbolo
+                    new_rule.append(new_noTerminal)  # Añade el nuevo no terminal al final
+                    new_grammar[new_noTerminal].append(new_rule)
+                
+                # Actualiza las reglas no recursivas (A -> B A')
+                new_grammar[noTerminal] = []
+                for regla in non_recursive_rules:
+                    new_rule = regla[:]  # Copia la regla completa
+                    new_rule.append(new_noTerminal)  # Añade el nuevo no terminal al final
+                    new_grammar[noTerminal].append(new_rule)
+
+                # Agrega la regla 'e' a las nuevas reglas de A'
+                new_grammar[new_noTerminal].append(['e'])  # 'e' representa la producción vacía
+
+            else:
+                # Si no hay recursividad, simplemente copia las reglas originales
+                new_grammar[noTerminal] = reglas[:]
+
+        self.grammar = new_grammar
+    #---------------------------ELIMINAR RECURSIVIDAD POR IZQUIERDA---------------------------
+
+    #---------------------------VERIFICAR LL(1)---------------------------
+    def verifyLL1(self):
+        for i in self.Grammar.keys():
+            interseccion = set()
+            for j in self.Grammar[i]:
+                if j[0] == 'e':
+                    interseccion=(interseccion & set('e'))
+                    print("if j[0] == 'e'")
+                else:
+                    print("else de --> if j[0] == 'e'")
+                    # interseccion=(interseccion & set(self.First[j[0]]))
+                    interseccion=(interseccion & set(j[0]))
+            print("interseccion ",len(interseccion))
+            if len(interseccion) != 0:
+                #return False 
+                print("No es LL(1)") 
+                break
