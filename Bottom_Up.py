@@ -1,30 +1,33 @@
-class Bottom_up:
-    def __init__(self,First,Follow,Grammar,NoTerminals,cadenas):
-        self.First=First
-        self.Follow=Follow
-        self.Grammar=Grammar
-        self.NoTerminals=NoTerminals
-        self.cadenas=cadenas
-        self.Terminals=set()
+class LR0Parser:
+
+    def __init__(self, Grammar, terminals, NoTerminals, cadenas):
+        self.Grammar = Grammar
+        self.terminals = terminals
+        self.NoTerminals = NoTerminals
+        self.start_symbol = cadenas[0]
+        self.build_parsing_table()
         self.extenderGramatica()
+        self.GOTO
 
+    def build_parsing_table(self):
+        self.closure = []
+        self.goto = []
+        self.items = []
+        self.parsing_table = {}
 
-    #Extender la gramatica
     def extenderGramatica(self):
         extend =  self.NoTerminals[0]+"'"
         self.Grammar[extend]=[self.NoTerminals[0]]
         print(self.Grammar)
-        
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> bbc9c92e1ee701354b5761f4357d6f80a3c886fc
-    def goTo(self,Items):
-        for non_terminal, production_rules in new_grammar.items():
-            if non_terminal not in self.Grammar:
-                self.Grammar[non_terminal] = []  # Initialize the list if non-terminal is not in the grammar
 
-            # Add each production rule to the grammar
-            self.Grammar[non_terminal].extend(production_rules)
-            
+    def GOTO(self, item_set, symbol):
+        goto_set = set()
+        for item in item_set:
+            if item[2] < len(item[1]) and item[1][item[2]] == symbol:
+                new_item = (item[0], item[1], item[2] + 1)
+                goto_set.add(new_item)
+        return self.closure_lr0(goto_set) if goto_set else None
+
+
+   

@@ -1,4 +1,4 @@
-from Lector import *
+from lector import *
 
 class Top_down:
     def __init__(self,First,Follow,Grammar,NoTerminals,cadenas):

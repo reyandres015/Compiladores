@@ -1,4 +1,4 @@
-from Lector import *
+from lector import *
 from TopDown import *
 from Bottom_Up import *
 
@@ -31,7 +31,7 @@ if __name__=="__main__":
         lector=Lector(noTerminals,grammar,cadenas,{},{})
         # Top-down parsing
         top_down=Top_down(lector.First,lector.followResultado,grammar,noTerminals,cadenas)
-        #bottom_up = Bottom_up(lector.First,lector.followResultado,grammar,noTerminals,cadenas)
+        bottom_up = LR0Parser(lector.followResultado,grammar,noTerminals,cadenas)
         numGramatica+=1
         
 
