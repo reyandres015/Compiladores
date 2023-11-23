@@ -165,3 +165,22 @@ s
 sssssssssssssssssssssssssssssf
 isfisfif
 '''
+
+'''
+segundo cado recursividad izquierda
+1
+1 2 10
+S
+S-Sa
+S-a
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+b
+c
+aaaaaaaaaaaaaaaaaaaaac
+aaaaaaacaaaaa
+baaaaaaaaaaaa
+'''

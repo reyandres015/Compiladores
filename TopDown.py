@@ -19,7 +19,7 @@ class Top_down:
         self.First=lector.First
         self.Follow=lector.followResultado
         print("grammar ",self.Grammar,
-              " noTerminals ",self.NoTerminals,
+              " noTerminals ",self.Terminals,
               "Terminals ",self.NoTerminals)
         print("FIRST: ",self.First)
         print("FOLLOW: ",self.Follow) 
@@ -31,6 +31,8 @@ class Top_down:
         self.Error=False
         self.dicAsing()
         self.predictiveParsingTable()
+        print("Tabla :")
+        print(self.TableM)
         for cadena in self.cadenas:
             self.Resultados.append(self.predictiveParsing(cadena))
         for valores in self.Resultados:
@@ -174,29 +176,37 @@ class Top_down:
     def verifyLL1(self):
         interseccion=False
         for noTerminal in self.NoTerminals:
-            for alpha in self.Grammar[noTerminal]:
-                for beta in self.Grammar[noTerminal]:
-                    if alpha!=beta and alpha!="e" and beta!="e":
-                        firstAlpha=self.getFirst(alpha)
-                        firstBeta=self.getFirst(beta)
-                        if len(firstAlpha) == 1 and firstAlpha[0]=="e":
-                            for firstB in firstBeta:
-                                for followTerminal in self.Follow[noTerminal]:
-                                    if firstB==followTerminal:
-                                        interseccion=True
-                                        return interseccion
-                        elif len(firstBeta)==1 and firstBeta[0]=="e":
-                            for fisrtA in firstAlpha:
-                                for followTerminalA in self.Follow[noTerminal]:
-                                    if fisrtA==followTerminalA:
-                                        interseccion=True
-                                        return interseccion
-                        else:
-                            for firstA in firstAlpha:
+            if len(self.Grammar[noTerminal])>1:
+                for alpha in self.Grammar[noTerminal]:
+                    for beta in self.Grammar[noTerminal]:
+                        if alpha!=beta and alpha!="e" and beta!="e":
+                            firstAlpha=self.getFirst(alpha)
+                            firstBeta=self.getFirst(beta)
+                            if len(firstAlpha) == 1 and firstAlpha[0]=="e":
                                 for firstB in firstBeta:
-                                    if firstA==firstB:
-                                        interseccion=True
-                                        return interseccion
+                                    for followTerminal in self.Follow[noTerminal]:
+                                        if firstB==followTerminal:
+                                            interseccion=True
+                                            return interseccion
+                            elif len(firstBeta)==1 and firstBeta[0]=="e":
+                                for fisrtA in firstAlpha:
+                                    for followTerminalA in self.Follow[noTerminal]:
+                                        if fisrtA==followTerminalA:
+                                            interseccion=True
+                                            return interseccion
+                            else:
+                                for firstA in firstAlpha:
+                                    for firstB in firstBeta:
+                                        if firstA==firstB:
+                                            interseccion=True
+                                            return interseccion
+            else:
+                for Alpha in self.Grammar[noTerminal]:
+                    firstAlpha=self.getFirst(Alpha)
+                    for follows in self.Follow[noTerminal]:
+                        if firstAlpha==follows:
+                            interseccion=True
+                            return interseccion               
         return interseccion
 
 
