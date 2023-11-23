@@ -18,7 +18,7 @@ if __name__=="__main__":
         for i in range(m):
             rule=input().split('-')
             if len(rule)!=2:
-                print(f"Error in rule: {rule}")
+                #print(f"Error in rule: {rule}")
                 continue
             if rule[0] not in grammar:
                 grammar[rule[0]]=[]
