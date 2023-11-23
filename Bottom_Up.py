@@ -1,5 +1,4 @@
 class Bottom_up:
-
     def __init__(self,First,Follow,Grammar,NoTerminals,cadenas):
         self.First=First
         self.Follow=Follow
