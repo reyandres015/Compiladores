@@ -1,11 +1,9 @@
 # Clase Lector para hacer el calculo de First and Follow
 class Lector:
-    def __init__(self, noTerminals, grammar, strings,First,followResultado):
+    def __init__(self, noTerminals, grammar,First,followResultado):
         self.noTerminals=noTerminals
         self.grammar=grammar
-        self.strings=strings
         self.First=First
-        
         self.followResultado=followResultado
         # Primero calculamos First para cada no terminal
         for noTerminal in self.noTerminals:

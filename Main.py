@@ -28,10 +28,10 @@ if __name__=="__main__":
         for i in range(k):
             cadena=str(input())
             cadenas.append(cadena)
-        lector=Lector(noTerminals,grammar,cadenas,{},{})
+        lector=Lector(noTerminals,grammar,{},{})
         # Top-down parsing
         top_down=Top_down(lector.First,lector.followResultado,grammar,noTerminals,cadenas)
-        bottom_up = LR0Parser(lector.followResultado,grammar,noTerminals,cadenas)
+        #bottom_up = LR0Parser(lector.followResultado,grammar,noTerminals,cadenas)
         numGramatica+=1
         
 
@@ -150,4 +150,18 @@ no
 no
 no
 no
+'''
+
+
+'''
+Caso recursividad izquierda
+1
+1 3 3
+S
+S-iSf
+S-SSa
+S-s
+s
+sssssssssssssssssssssssssssssf
+isfisfif
 '''
