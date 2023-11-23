@@ -14,10 +14,10 @@ class Top_down:
         self.NotLL1=self.verifyLL1()
         if self.NotLL1:
             print("no es LL1")
-            self.eliminateLeftRecursion()
-            lector=Lector(self.NoTerminals,self.Grammar,{},{})
-            self.First=lector.First
-            self.Follow=lector.followResultado
+        self.eliminateLeftRecursion()
+        lector=Lector(self.NoTerminals,self.Grammar,{},{})
+        self.First=lector.First
+        self.Follow=lector.followResultado
         print("grammar ",self.Grammar,
               " noTerminals ",self.NoTerminals,
               "Terminals ",self.NoTerminals)
@@ -201,30 +201,37 @@ class Top_down:
 
 
     def eliminateLeftRecursion(self):
-        alfabeto_mayusculas = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+        posiblesNoTerminales = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
         print("eliminating left recursion")
         NewGrammar={}
         NewNoTerminals=[]
-        for terminal in self.NoTerminals:
-            if terminal not in NewNoTerminals:
-                NewNoTerminals.append(terminal)
-            if terminal not in NewGrammar:
-                NewGrammar[terminal]=[]
-            auxiliarTerminal=''
-            for posibleNoTerminal in alfabeto_mayusculas:
-                if posibleNoTerminal not in self.NoTerminals:
-                    auxiliarTerminal=posibleNoTerminal
+        needEliminate=False
+        for noTerminal in self.NoTerminals:
+            if noTerminal not in NewNoTerminals:
+                NewNoTerminals.append(noTerminal)
+            if noTerminal not in NewGrammar:
+                NewGrammar[noTerminal]=[]
+            for produccion in self.Grammar[noTerminal]:
+                # Si tiene Recursividad Izquierda
+                if produccion[0]==noTerminal:
+                    needEliminate=True
                     break
-            for produccion in self.Grammar[terminal]:
-                print(terminal,"->",produccion)
-                if auxiliarTerminal not in NewNoTerminals:
-                    NewNoTerminals.append(auxiliarTerminal)
-                if auxiliarTerminal not in NewGrammar:
-                    NewGrammar[auxiliarTerminal]=[]
-                if produccion[0]==terminal:    
-                    NewGrammar[auxiliarTerminal].append(produccion[1:]+auxiliarTerminal)
-                elif produccion[0]!=terminal:
-                    NewGrammar[terminal].append(produccion+auxiliarTerminal)
+            # Eliminar Recursividad directa
+            if needEliminate:
+                auxiliarTerminal=''
+                for posibleNoTerminal in  posiblesNoTerminales:
+                    if posibleNoTerminal not in self.NoTerminals and posibleNoTerminal not in NewNoTerminals:
+                        auxiliarTerminal=posibleNoTerminal
+                        NewNoTerminals.append(auxiliarTerminal)
+                        NewGrammar[auxiliarTerminal]=[]
+                        break
+                for produccion in self.Grammar[noTerminal]:
+                    if produccion[0]==noTerminal:
+                        NewGrammar[auxiliarTerminal].append(produccion[1:]+auxiliarTerminal)
+                    else:
+                        NewGrammar[noTerminal].append(produccion+auxiliarTerminal)
+            else:
+                NewGrammar[noTerminal]=self.Grammar[noTerminal]
         self.Grammar=NewGrammar
         self.NoTerminals=NewNoTerminals                    
         #print("new grammar ",NewGrammar,"new noTerminals ",NewNoTerminals)        
