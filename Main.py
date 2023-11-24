@@ -23,11 +23,12 @@ if __name__=="__main__":
             if rule[0] not in grammar:
                 grammar[rule[0]]=[]
             grammar[rule[0]].append(rule[1])
-
+        # Guardar cadenas
         cadenas=[]
         for i in range(k):
             cadena=str(input())
             cadenas.append(cadena)
+        # Para implementar First y Follow
         lector=Lector(noTerminals,grammar,{},{})
         # Top-down parsing
         top_down=Top_down(lector.First,lector.followResultado,grammar,noTerminals,cadenas)
