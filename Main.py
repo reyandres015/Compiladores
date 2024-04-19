@@ -106,7 +106,8 @@ def follow(s):
                     # Agregamos ese simbolo a la lista de siguientes
                     follows.append(nxt)
                 elif (nxt in noTerminals):  # Si el simbolo es no terminal
-                    nxt = first(nxt)  # Buscamos los primeros del siguiente
+                    # Buscamos los primeros del siguiente
+                    nxt = first(grammar, nxt)
                     if ("ε" in nxt):  # Si existe epsilon en los primeros
                         # Se añaden los siguientes del padre
                         nxt += follow(nont)
@@ -118,6 +119,45 @@ def follow(s):
     if ("ε" in follows):
         follows.remove("ε")
     return follows
+
+# Algoritmo de predicción
+
+
+def conjunto_prediccion(grammar, primeros, siguientes):
+    conjuntos_prediccion = {}
+
+    for no_terminal, producciones in grammar.items():
+        conjuntos_prediccion[no_terminal] = {}
+        for produccion in producciones:
+            primeros_de_produccion = set()
+
+            for simbolo in produccion:
+                if simbolo in grammar:
+                    primeros_de_produccion |= primeros[simbolo] - {'ε'}
+                    if 'ε' not in primeros[simbolo]:
+                        break
+                elif simbolo != 'ε' and simbolo != '$':
+                    primeros_de_produccion.add(simbolo)
+                    break
+            else:
+                primeros_de_produccion |= siguientes[no_terminal] - {'$', 'ε'}
+
+            conjuntos_prediccion[no_terminal][" ".join(
+                produccion)] = primeros_de_produccion
+
+    return conjuntos_prediccion
+
+# funcion para comprobar que la gramatica es LL(1)
+
+
+def isLL1(grammar, conjuntos_prediccion):
+    for no_terminal, producciones in grammar.items():
+        for produccion, conjunto in conjuntos_prediccion[no_terminal].items():
+            for no_terminal2, producciones2 in grammar.items():
+                for produccion2, conjunto2 in conjuntos_prediccion[no_terminal2].items():
+                    if no_terminal != no_terminal2 and produccion == produccion2 and conjunto & conjunto2:
+                        return False
+    return True
 
 
 def imprimirGrammar(grammar, new):
@@ -138,9 +178,9 @@ def convert_grammar(grammar):
 
 # Guarda las reglas de la gramatica
 grammar = {
-    'E': ['E + T', 'E - T', 'T'],
-    'T': ['T * F', 'T / F', 'F'],
-    'F': ['( E )', 'id']
+    'A': ['B C', 'ant A all'],
+    'B': ['big C', 'bus A boss', 'ε'],
+    'C': ['cat', 'cow']
 }
 
 # Guarda los no terminales de la gramatica
@@ -157,10 +197,52 @@ imprimirGrammar(grammar, result["noTerminals"])
 
 # Algoritmo de primeros
 print('Primeros')
+primeros = {}
 for nont in result['noTerminals']:
+    primeros[nont] = set(first(grammar, nont))
     print(f'P({nont}) ={first(grammar,nont)}')
 
 # Algoritmo de siguientes
 print('Siguientes')
+siguientes = {}
 for nont in result['noTerminals']:
+    siguientes[nont] = set(follow(nont))
     print(f'S({nont}) ={follow(nont)}')
+
+# Algoritmo de prediccion
+print('Conjuntos de prediccion')
+conjuntos_prediccion = conjunto_prediccion(grammar, primeros, siguientes)
+
+print(conjuntos_prediccion)
+
+# Comprobacion de LL(1)
+if isLL1(grammar, conjuntos_prediccion):
+    print('La gramatica es LL(1)')
+else:
+    print('La gramatica no es LL(1)')
+    
+# funcion para cada no terminal en un ASDR
+def asdr(noTerminal,grammar):
+    # extraemos la gramatica
+    reglas=grammar[noTerminal]
+    #añadimos el terminal al diccionario del First
+    if noTerminal not in Grammar.first:
+                Grammar.first[noTerminal]=[]
+    # Recorremos las reglas
+    for regla in reglas:
+        #si el primer caracter es un Terminal, lo añadimos al first del no terminal
+        if regla[0] not in Grammar.noTerminals:
+            # verificamos que no exista ya el terminal en el First del terminal
+            if regla[0] not in Grammar.first[noTerminal]:
+                Grammar.first[noTerminal].append(regla[0])
+            else: continue
+        else: # si el primer caracter es un no terminal
+            # verificamos que el caracter no sea el mismo no terminal 
+            if regla[0] != noTerminal:
+                # hallamos el first del no terminal
+                asdr(regla[0],grammar)
+                # Recorremos el first del caracter no terminal
+                for a in Grammar.first[regla[0]]:
+                    # verificamos que no exista ya el terminal en el First del terminal
+                    if a not in Grammar.first[noTerminal]:
+                        Grammar.first[noTerminal].append(a)
