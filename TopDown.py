@@ -19,8 +19,8 @@ class Top_down:
         #print("grammar ",self.Grammar,
           #    " noTerminals ",self.Terminals,
           #    "Terminals ",self.NoTerminals)
-        #print("FIRST: ",self.First)
-        #print("FOLLOW: ",self.Follow) 
+        print("FIRST: ",self.First)
+        print("FOLLOW: ",self.Follow) 
         #self.verifyLL1()
         #self.detect_and_eliminate_left_recursion()
         self.TableM = [["" for _ in range(len(self.Terminals))] for _ in range(len(self.NoTerminals))]
@@ -162,18 +162,21 @@ class Top_down:
 
  #---------------------------ELIMINAR RECURSIVIDAD POR IZQUIERDA---------------------------
 
-    def eliminateLeftRecursion(self):
-        posiblesNoTerminales = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+    def eliminateLeftRecursion(grammar,noTerminals):
+        possibleTerminals = []
+        for noTerminal in noTerminals:
+            possibleTerminals.append(noTerminal+"'")
+            
         #print("eliminating left recursion")
         NewGrammar={}
         NewNoTerminals=[]
         needEliminate=False
-        for noTerminal in self.NoTerminals:
+        for noTerminal in noTerminals:
             if noTerminal not in NewNoTerminals:
                 NewNoTerminals.append(noTerminal)
             if noTerminal not in NewGrammar:
                 NewGrammar[noTerminal]=[]
-            for produccion in self.Grammar[noTerminal]:
+            for produccion in grammar[noTerminal]:
                 # Si tiene Recursividad Izquierda
                 if produccion[0]==noTerminal:
                     needEliminate=True
@@ -181,19 +184,19 @@ class Top_down:
             # Eliminar Recursividad directa
             if needEliminate:
                 auxiliarTerminal=''
-                for posibleNoTerminal in  posiblesNoTerminales:
-                    if posibleNoTerminal not in self.NoTerminals and posibleNoTerminal not in NewNoTerminals:
+                for posibleNoTerminal in  possibleTerminals:
+                    if posibleNoTerminal not in noTerminals and posibleNoTerminal not in NewNoTerminals:
                         auxiliarTerminal=posibleNoTerminal
                         NewNoTerminals.append(auxiliarTerminal)
                         NewGrammar[auxiliarTerminal]=[]
                         break
-                for produccion in self.Grammar[noTerminal]:
+                for produccion in grammar[noTerminal]:
                     if produccion[0]==noTerminal:
                         NewGrammar[auxiliarTerminal].append(produccion[1:]+auxiliarTerminal)
                     else:
                         NewGrammar[noTerminal].append(produccion+auxiliarTerminal)
             else:
-                NewGrammar[noTerminal]=self.Grammar[noTerminal]
-        self.Grammar=NewGrammar
-        self.NoTerminals=NewNoTerminals                    
-        #print("new grammar ",NewGrammar,"new noTerminals ",NewNoTerminals)        
+                NewGrammar[noTerminal]=grammar[noTerminal]
+        grammar=NewGrammar
+        noTerminals=NewNoTerminals                    
+        print("new grammar ",NewGrammar,"new noTerminals ",NewNoTerminals)        
