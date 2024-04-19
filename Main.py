@@ -75,6 +75,50 @@ def first(grammar, s):
             firsts += firstTemp
     return firsts
 
+# Algoritmo de siguientes
+
+
+def findSymbol(s):
+    results = {}
+    for nont in grammar:  # Por NT de la gramatica
+        for production in grammar[nont]:  # Por produccion del simbolo
+            for symbol in production:
+                if s in production:
+                    try:
+                        results[nont] += [production]
+                    except KeyError:
+                        results[nont] = [production]
+    return results
+
+
+def follow(s):
+    follows = []
+    if s == next(iter(grammar)):  # Si el NT es el estado inicial, el siguiente sera $
+        follows.append("$")
+    # Buscamos las producciones donde se encuentra nuestro NT
+    found = findSymbol(s)
+    for nont in found:  # Por cada NT de las reglas encontradas
+        for production in found[nont]:
+            if (production.index(s) < len(production)-1):
+                # El simbolo despues del NT
+                nxt = production[production.index(s)+1]
+                if (nxt not in noTerminals):  # Si el simbolo es terminal
+                    # Agregamos ese simbolo a la lista de siguientes
+                    follows.append(nxt)
+                elif (nxt in noTerminals):  # Si el simbolo es no terminal
+                    nxt = first(nxt)  # Buscamos los primeros del siguiente
+                    if ("ε" in nxt):  # Si existe epsilon en los primeros
+                        # Se añaden los siguientes del padre
+                        nxt += follow(nont)
+                    follows += nxt
+            else:
+                if (s != nont):
+                    follows += follow(nont)
+    follows = list(set(follows))
+    if ("ε" in follows):
+        follows.remove("ε")
+    return follows
+
 
 def imprimirGrammar(grammar, new):
     for key in grammar:
@@ -105,11 +149,18 @@ noTerminals = grammar.keys()
 print('Gramatica inicial')
 imprimirGrammar(grammar, noTerminals)
 
+# Elimina la recursividad izquierda
 print('Gramatica final')
 result = eliminateLeftRecursion(grammar, noTerminals)
 grammar = convert_grammar(result["grammar"])
 imprimirGrammar(grammar, result["noTerminals"])
 
+# Algoritmo de primeros
 print('Primeros')
 for nont in result['noTerminals']:
     print(f'P({nont}) ={first(grammar,nont)}')
+
+# Algoritmo de siguientes
+print('Siguientes')
+for nont in result['noTerminals']:
+    print(f'S({nont}) ={follow(nont)}')
