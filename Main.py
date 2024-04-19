@@ -1,3 +1,11 @@
+class Grammar:
+    recursiveGrammar = {},
+    noTerminals = [],
+    grammar = {},
+    first = [],
+    follow = [],
+
+
 def eliminateLeftRecursion(grammar, noTerminals):
     possibleTerminals = []
 
@@ -19,6 +27,8 @@ def eliminateLeftRecursion(grammar, noTerminals):
             if produccion[0] == noTerminal:
                 needEliminate = True
                 break
+            else:
+                needEliminate = False
         # Eliminar Recursividad directa
         if needEliminate:
             auxiliarTerminal = ''
@@ -36,20 +46,49 @@ def eliminateLeftRecursion(grammar, noTerminals):
                     NewGrammar[noTerminal].append(produccion+auxiliarTerminal)
         else:
             NewGrammar[noTerminal] = grammar[noTerminal]
-    return [NewGrammar, NewNoTerminals]
+    return {'grammar': NewGrammar, 'noTerminals': NewNoTerminals}
 
 
-if __name__ == "__main__":
-    # Guarda las reglas de la gramatica
-    grammar = {
-        'E': ['E + T', 'E - T', 'T'],
-        'T': ['T * F', 'T / F', 'F'],
-        'F': ['(E)', 'id']
-    }
+def first(grammar, s):
+    firsts = []
+    for production in grammar[s]:  # Para cada produccion de la regla
+        #Eliminar espacios en blanco de production
+        production = production.replace(" ", "")
+        if production[0] not in noTerminals:
+            firsts.append(production[0])
+        else:
+            firstTemp = first(grammar, production[0])
+            if 'ε' in firstTemp:
+                if production[1]:
+                    firstTemp.remove('ε')
+                    firstTemp += first(grammar, production[1])
+            firsts += firstTemp
+    return firsts
 
-    # Guarda los no terminales de la gramatica
-    noTerminals = grammar.keys()
 
-    print(grammar)
-    result = eliminateLeftRecursion(grammar, noTerminals)
-    print("new grammar ", result[0], "new noTerminals ", result[1])
+def imprimirGrammar(grammar, new):
+    for key in grammar:
+        print(key, " --> ", grammar[key])
+    print('No terminales: ', list(new))
+
+
+# Guarda las reglas de la gramatica
+grammar = {
+    'E': ['E + T', 'E - T', 'T'],
+    'T': ['T * F', 'T / F', 'F'],
+    'F': ['( E )', 'id']
+}
+
+# Guarda los no terminales de la gramatica
+noTerminals = grammar.keys()
+
+print('Gramatica inicial')
+imprimirGrammar(grammar, noTerminals)
+
+print('Gramatica final')
+result = eliminateLeftRecursion(grammar, noTerminals)
+imprimirGrammar(result["grammar"], result["noTerminals"])
+
+print('Primeros')
+for nont in result['noTerminals']:
+    print(f'P({nont}) ={first(result["grammar"],nont)}')
