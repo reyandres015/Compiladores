@@ -27,7 +27,8 @@ def eliminateLeftRecursion(grammar, noTerminals):
     NewNoTerminals = []
 
     needEliminate = False
-    for noTerminal in noTerminals:
+    for i in range(len(noTerminals)):
+        noTerminal = noTerminals[i]
         if noTerminal not in NewNoTerminals:
             NewNoTerminals.append(noTerminal)
         if noTerminal not in NewGrammar:
@@ -39,20 +40,25 @@ def eliminateLeftRecursion(grammar, noTerminals):
                 break
             else:
                 needEliminate = False
+
         # Eliminar Recursividad directa
         if needEliminate:
             auxiliarTerminal = ''
-            for posibleNoTerminal in possibleTerminals:
-                if posibleNoTerminal not in noTerminals and posibleNoTerminal not in NewNoTerminals:
-                    auxiliarTerminal = posibleNoTerminal
-                    NewNoTerminals.append(auxiliarTerminal)
-                    NewGrammar[auxiliarTerminal] = []
-                    break
+            posibleNoTerminal = possibleTerminals[i]
+            if posibleNoTerminal not in NewNoTerminals:
+                auxiliarTerminal = posibleNoTerminal
+                NewNoTerminals.append(auxiliarTerminal)
+                NewGrammar[auxiliarTerminal] = []
+
             for produccion in grammar[noTerminal]:
                 if produccion[0] == noTerminal:
                     NewGrammar[auxiliarTerminal].append(
                         produccion[1:] + ' ' + auxiliarTerminal)
                 else:
+                    if produccion[0] == 'ε':
+                        # eliminar de produccion el epsilon
+                        produccion = produccion[1:]
+                        NewGrammar[auxiliarTerminal].append('ε')
                     NewGrammar[noTerminal].append(
                         produccion + ' ' + auxiliarTerminal)
         else:
@@ -178,13 +184,39 @@ def convert_grammar(grammar):
 
 # Guarda las reglas de la gramatica
 grammar = {
-    'A': ['B C', 'ant A all'],
-    'B': ['big C', 'bus A boss', 'ε'],
-    'C': ['cat', 'cow']
+    'S': ['A B C', 'D E'],
+    'A': ['dos B tres', 'ε'],
+    'B': ['B cuatro C cinco', 'ε'],
+    'C': ['seis A B', 'ε'],
+    'D': ['uno A E', 'B'],
+    'E': ['tres']
 }
 
+# 1. Sin recursividad
+# grammar = {
+#    'S': ['A B C', 'D E'],
+#    'A': ['dos B tres', 'ε'],
+#    'B': ["B'"],
+#    "B'": ["cuatro C cinco B'", 'ε'],
+#    'C': ['seis A B', 'ε'],
+#    'D': ['uno A E', 'B'],
+#    'E': ['tres']
+# }
+
+# 1. Sin recursividad
+# grammar = {
+#    'S': ['B uno', 'dos C','ε' ],
+#    'A': ['dos B tres', 'ε'],
+#    'B': ["B'"],
+#    "B'": ["cuatro C cinco B'", 'ε'],
+#    'C': ['seis A B', 'ε'],
+#    'D': ['uno A E', 'B'],
+#    'E': ['tres']
+# }
+
+
 # Guarda los no terminales de la gramatica
-noTerminals = grammar.keys()
+noTerminals = list(grammar.keys())
 
 print('Gramatica inicial')
 imprimirGrammar(grammar, noTerminals)
@@ -220,27 +252,30 @@ if isLL1(grammar, conjuntos_prediccion):
     print('La gramatica es LL(1)')
 else:
     print('La gramatica no es LL(1)')
-    
+
 # funcion para cada no terminal en un ASDR
-def asdr(noTerminal,grammar):
+
+
+def asdr(noTerminal, grammar):
     # extraemos la gramatica
-    reglas=grammar[noTerminal]
-    #añadimos el terminal al diccionario del First
+    reglas = grammar[noTerminal]
+    # añadimos el terminal al diccionario del First
     if noTerminal not in Grammar.first:
-                Grammar.first[noTerminal]=[]
+        Grammar.first[noTerminal] = []
     # Recorremos las reglas
     for regla in reglas:
-        #si el primer caracter es un Terminal, lo añadimos al first del no terminal
+        # si el primer caracter es un Terminal, lo añadimos al first del no terminal
         if regla[0] not in Grammar.noTerminals:
             # verificamos que no exista ya el terminal en el First del terminal
             if regla[0] not in Grammar.first[noTerminal]:
                 Grammar.first[noTerminal].append(regla[0])
-            else: continue
-        else: # si el primer caracter es un no terminal
-            # verificamos que el caracter no sea el mismo no terminal 
+            else:
+                continue
+        else:  # si el primer caracter es un no terminal
+            # verificamos que el caracter no sea el mismo no terminal
             if regla[0] != noTerminal:
                 # hallamos el first del no terminal
-                asdr(regla[0],grammar)
+                asdr(regla[0], grammar)
                 # Recorremos el first del caracter no terminal
                 for a in Grammar.first[regla[0]]:
                     # verificamos que no exista ya el terminal en el First del terminal
