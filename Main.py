@@ -69,16 +69,19 @@ def eliminateLeftRecursion(grammar, noTerminals):
 def first(grammar, s):
     firsts = []
     for production in grammar[s]:  # Para cada produccion de la regla
-        # Eliminar espacios en blanco de production
-        if production[0] not in noTerminals:
-            firsts.append(production[0])
-        else:
-            firstTemp = first(grammar, production[0])
-            if 'ε' in firstTemp:
-                if production[1]:
-                    firstTemp.remove('ε')
-                    firstTemp += first(grammar, production[1])
-            firsts += firstTemp
+        for char in production:  # Para cada caracter de la produccion
+            if char not in noTerminals:  # Si es un terminal
+                if char not in firsts:
+                    firsts.append(char)
+                break
+            else:
+                firstsTemp = first(grammar, char)
+                if 'ε' in firstsTemp:
+                    firstsTemp.remove('ε')
+                # Eliminar terminales repetidos
+                for f in firstsTemp:
+                    if f not in firsts:
+                        firsts.append(f)
     return firsts
 
 # Algoritmo de siguientes
@@ -225,12 +228,13 @@ imprimirGrammar(grammar, noTerminals)
 print('Gramatica final')
 result = eliminateLeftRecursion(grammar, noTerminals)
 grammar = convert_grammar(result["grammar"])
-imprimirGrammar(grammar, result["noTerminals"])
+noTerminals = result["noTerminals"]
+imprimirGrammar(grammar, noTerminals)
 
 # Algoritmo de primeros
 print('Primeros')
 primeros = {}
-for nont in result['noTerminals']:
+for nont in noTerminals:
     primeros[nont] = set(first(grammar, nont))
     print(f'P({nont}) ={first(grammar,nont)}')
 
@@ -241,11 +245,16 @@ for nont in result['noTerminals']:
     siguientes[nont] = set(follow(nont))
     print(f'S({nont}) ={follow(nont)}')
 
-# Algoritmo de prediccion
+# Algoritmo de predicción
 print('Conjuntos de prediccion')
 conjuntos_prediccion = conjunto_prediccion(grammar, primeros, siguientes)
 
-print(conjuntos_prediccion)
+#imprimir el dict conjuntos_prediccion
+for no_terminal, producciones in conjuntos_prediccion.items():
+    print(no_terminal,'= {')
+    for produccion, conjunto in producciones.items():
+        print(f'P({produccion}) = {conjunto}')
+    print('}')
 
 # Comprobacion de LL(1)
 if isLL1(grammar, conjuntos_prediccion):
